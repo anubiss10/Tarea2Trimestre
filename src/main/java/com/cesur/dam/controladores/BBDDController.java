@@ -22,10 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cesur.dam.Entidades.Aseguradora;
 import com.cesur.dam.Entidades.Cliente;
+import com.cesur.dam.Entidades.Libros;
 import com.cesur.dam.servicios.AseguradoraService;
 import com.cesur.dam.servicios.ClienteService;
 import com.cesur.dam.servicios.ConexionService;
 import com.cesur.dam.servicios.FileService;
+import com.cesur.dam.servicios.MongoDBService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.cesur.dam.bbdd.entities.entitiesobjectdb.AseguradorasOB;
@@ -33,11 +35,13 @@ import com.cesur.dam.bbdd.entities.entitiesobjectdb.ClientesOB;
 import com.cesur.dam.bbdd.entities.entitiesobjectdb.Poliza;
 import com.cesur.dam.bbdd.entities.entitiesobjectdb.SiniestroOB;
 import com.cesur.dam.bbdd.services.ObjectdbService;
+import com.cesur.dam.bbdd.services.*;
 @Controller
 public class BBDDController {
 	@Autowired
 	protected ObjectdbService objectDBService;
-	
+	@Autowired
+	protected MongoDBService mongoService;
     //Declaración de las entidades servicio para conectar con estos
     @Autowired
     protected ConexionService conexionService;
@@ -206,7 +210,16 @@ public class BBDDController {
 	   
 	   
 	    }
-
+	   @GetMapping("/listadolibros")
+	   @ResponseBody
+	   public List<Libros> listar() {
+	       return mongoService.listar();
+	   }
+	   @GetMapping("/anadirLibros")
+	   @ResponseBody
+	   public String anadirLibros() {
+	       return mongoService.anadirLibros();
+	   }
 @RestController
 @RequestMapping("/api/siniestros")
 public class SiniestroController {
@@ -223,4 +236,5 @@ public class SiniestroController {
         return siniestroService.obtenerSiniestrosPorCliente(clienteId);
     }
 }
+
 }
