@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cesur.dam.Entidades.Aseguradora;
 import com.cesur.dam.Entidades.Cliente;
-import com.cesur.dam.Entidades.Libros;
+import com.cesur.dam.Entidades.Empleado;
 import com.cesur.dam.servicios.AseguradoraService;
 import com.cesur.dam.servicios.ClienteService;
 import com.cesur.dam.servicios.ConexionService;
@@ -210,16 +210,28 @@ public class BBDDController {
 	   
 	   
 	    }
-	   @GetMapping("/listadolibros")
-	   @ResponseBody
-	   public List<Libros> listar() {
-	       return mongoService.listar();
-	   }
-	   @GetMapping("/anadirLibros")
-	   @ResponseBody
-	   public String anadirLibros() {
-	       return mongoService.anadirLibros();
-	   }
+	   @RestController
+	    @RequestMapping("/listadoempleados")
+	    public class MongoController {
+
+	        private final MongoDBService mongoService;
+
+	        public MongoController(MongoDBService mongoService) {
+	            this.mongoService = mongoService;
+	        }
+
+	        @GetMapping("/listaE")
+	        @ResponseBody
+	        public List<Empleado> listarEmpleados() {
+	            return mongoService.listar();
+	        }
+
+	        @GetMapping("/anadirEmpleados")
+	        @ResponseBody
+	        public String anadirEmpleados() {
+	            return mongoService.anadirEmpleados();
+	        }
+	    }
 @RestController
 @RequestMapping("/api/siniestros")
 public class SiniestroController {

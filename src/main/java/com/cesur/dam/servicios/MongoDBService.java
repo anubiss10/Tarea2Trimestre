@@ -1,11 +1,10 @@
 package com.cesur.dam.servicios;
 
 import java.util.List;
-import com.cesur.dam.Entidades.*;
-public interface MongoDBService {
-	
-	 public List<Libros> listar();
+import com.cesur.dam.Entidades.Empleado;
 
-	 public String anadirLibros();
-	 
+public interface MongoDBService {
+    public List<Empleado> listar();
+
+    public String anadirEmpleados();
 }
