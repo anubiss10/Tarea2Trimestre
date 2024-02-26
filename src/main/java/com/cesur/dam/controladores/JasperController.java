@@ -12,20 +12,30 @@ import com.cesur.dam.bbdd.services.JasperService;
 @RequestMapping("jasper")
 public class JasperController {
 
-    private final JasperService jasperService;
+	private final JasperService jasperService;
 
-    @Autowired
-    public JasperController(JasperService jasperService) {
-        this.jasperService = jasperService;
-    }
+	@Autowired
+	public JasperController(JasperService jasperService) {
+		this.jasperService = jasperService;
+	}
 
-    @GetMapping("generar")
-    @ResponseBody
-    public String generarInforme() {
-        if (jasperService.generarInforme()) {
-            return "Informe generado correctamente";
-        } else {
-            return "Error al generar el informe";
-        }
-    }
+	@GetMapping("generar")
+	@ResponseBody
+	public String generarInforme() {
+		if (jasperService.generarInforme()) {
+			return "Informe generado correctamente";
+		} else {
+			return "Error al generar el informe";
+		}
+	}
+
+	@GetMapping("generarOrdenado")
+	@ResponseBody
+	public String generarInformeOrdenado() {
+		if (jasperService.generarInformeOrdenadoPorNombre()) {
+			return "Informe generado correctamente y ordenado por nombre";
+		} else {
+			return "Error al generar el informe ordenado por nombre";
+		}
+	}
 }

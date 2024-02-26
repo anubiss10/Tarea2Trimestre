@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +93,7 @@ public class JasperService {
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(new FileOutputStream(rutaCompleta))); // Usar la ruta completa
 
             SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
-            exportConfig.setMetadataAuthor("Julian");
+            exportConfig.setMetadataAuthor("Gonzalo");
             exportConfig.setEncrypted(true);
             exportConfig.setAllowedPermissionsHint("PRINTING");
 
@@ -104,4 +106,41 @@ public class JasperService {
             return false;
         }
     }
+    public boolean generarInformeOrdenadoPorNombre() {
+        String nombreFichero = "informe_ordenado.pdf";
+        String rutaCompleta = System.getProperty("user.dir") + "/" + nombreFichero;
+
+        List<Persona> lista = obtenerPersonasDesdeBD();
+
+        // Ordenar la lista por nombre
+        Collections.sort(lista, Comparator.comparing(Persona::getNombre));
+
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("titulo", "Informe de Clientes (Ordenado por Nombre)");
+
+        try {
+            JasperPrint informe = JasperFillManager.fillReport(
+                    JasperCompileManager.compileReport(getClass().getResourceAsStream("/Informe.jrxml")),
+                    parametros,
+                    new JRBeanCollectionDataSource(lista)
+            );
+
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setExporterInput(new SimpleExporterInput(informe));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(new FileOutputStream(rutaCompleta)));
+
+            SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
+            exportConfig.setMetadataAuthor("Julian");
+            exportConfig.setEncrypted(true);
+            exportConfig.setAllowedPermissionsHint("PRINTING");
+
+            exporter.exportReport();
+
+            return true;
+        } catch (IOException | JRException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
